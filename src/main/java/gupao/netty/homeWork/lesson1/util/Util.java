@@ -3,6 +3,7 @@ package gupao.netty.homeWork.lesson1.util;
 import gupao.netty.homeWork.lesson1.base.Message;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,14 +21,15 @@ public class Util {
 		}
 		
 		Message message=new Message();
-		String[] list=expression.split("|");
+		String[] list=expression.split("\\|");
 		
 		//分别解析消息内容 暂时不校验 TODO
 		message.setFlag(list[0]);//标志位
 		message.setMsgFrom(list[1]); //来源ip:port
 		message.setMsgTo( Arrays.asList(list[2].split(",")));//对方ip:port组成的列表
-		message.setContent(list[3]); //内容
+		List<String> msgTos=message.getMsgTo();
 		
+		message.setContent(list[3]); //内容
 		return message;
 	}
 	
@@ -62,10 +64,13 @@ public class Util {
 		sb.append("|");
 		sb.append(message.getMsgFrom());
 		sb.append("|");
-		sb.append(message.getMsgTo());  //群发地址用,隔开
+		List<String> msgTos=message.getMsgTo();
+		for(String msgTo:msgTos){//群发地址用,隔开
+			sb.append(msgTo+",");
+		}
 		sb.append("|");
 		sb.append(message.getContent());
-		
+		logger.debug("打包后的message={}",sb.toString());
 		if(msgChk(sb.toString())){
 			return sb.toString();
 		}else{
@@ -103,7 +108,7 @@ public class Util {
 	/**检查是否ip:port形式*/
 	public static boolean isValidAddr(String addr){
 		if(!addr.matches("[0-9]")){
-			
+			//TODO 有时间再优化
 		}
 		return true;
 	}

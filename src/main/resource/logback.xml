@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+	<contextName>NcbsCleanContext</contextName>
+	<property name="LOG_HOME" value="log" />
+	<property name="XML_HOME" value="src/main/resources/logback" />
+	<property name="MAX_DAY" value="7" />
+	<property name="MAX_FILE_SIZE" value="50MB" />
+	<property name="PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}][%level][%X{BEANID}][%X{STEPID}][%class:%line]%n%msg%n%n"/>
+	<property name="PATTERN_BUSI" value="[%d{yyyy-MM-dd HH:mm:ss:SSS}][%level][%X{BEANID}][%X{STEPID}]%n%msg%n%n"/>	
+	<property name="LOG_LV" value="INFO" />
+	<property name="ENCODING" value="UTF-8" />
+	
+	<!-- 说明：appender指定一个输出格式，包括pattern、路径、名称、分卷模式、filter等信息，而
+	logger则指定某些package或者具体类要绑定的appender -->
+	
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+		<target>System.out</target>
+	</appender>
+	<appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/error.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/hislog/error.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<maxHistory>${MAX_DAY}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+		<!-- <filter class="com.edison.util.log.ErrFilter" /> -->
+	</appender>
+	<appender name="FILE-STACK" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/stack.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/hislog/stack.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<maxHistory>${MAX_DAY}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%d{yyyy-MM-dd HH:mm:ss}][%X{TASKID}][%X{BEANID}][%X{STEPID}][%class:%line] - %msg%n%ex%n</pattern>
+		</encoder>
+		<!-- <filter class="com.edison.util.log.StackFilter" /> -->
+	</appender>
+	<appender name="FILE-WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/warn.log</file>
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		  <fileNamePattern>${LOG_HOME}/warn.log.%d{yyyy-MM-dd}</fileNamePattern>
+		  <maxHistory>${MAX_DAY}</maxHistory>
+		</rollingPolicy>
+		<!-- <filter class="com.edison.util.log.StackFilter" /> -->
+	</appender>
+	<appender name="FILE-EXTRTIOR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/exterior.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/hislog/exterior.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<maxHistory>${MAX_DAY}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- add for DB begin,这里就是logger+appender -->
+	<appender name="FILE-DB" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/db.log</file>
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		  <fileNamePattern>${LOG_HOME}/hislog/db.log.%d{yyyy-MM-dd}</fileNamePattern>
+		  <maxHistory>${MAX_DAY}</maxHistory>
+		</rollingPolicy>
+	</appender>
+	<logger name="druid.sql" level="ERROR" additivity="false">
+		<appender-ref ref="FILE-DB" />
+	</logger>
+	<!-- add for DB end -->
+
+    <!-- 这里具体指定某些类的输出路径，也是logger+appender的形式 -->
+	<include file="${XML_HOME}/amortized.xml" />
+	
+	<!-- 这里的logger的name就是LoggerFactory.getLogger("xxxx")中的xxxx，可以认为是一个字符串 -->
+	<!-- name中是com.edison，则com.edison包及其子包下的所有类使用的log配置都是info,且输出到各个Appender.
+其他类使用的log配置都是根root的logger -->
+	<logger name="com.edison" level="${LOG_LV}" additivity="false"> <!-- Logger才是决定哪些代码在哪里输出的关键 -->
+		<appender-ref ref="FILE-ERROR" />
+		<appender-ref ref="FILE-STACK" />
+		<appender-ref ref="FILE-WARN" />
+		<appender-ref ref="CONSOLE" />	
+	</logger><!-- 这里相当于要把com.edison下面的日志同时输出到这四个appender去 ，所以加了几个filter进行过滤，达到
+	              日志分流且不会重复写日志的效果-->
+
+	<!-- 上面配置的logger具有继承性，com.edison的logger继承root，而com.edison.com.edison.testJunit.oth.apache_commons_io
+	又继承com.edison，也会输出到com.edsion配置的几个appender中 -->
+	<root level="${LOG_LV}">
+		<appender-ref ref="FILE-EXTRTIOR" />
+		<appender-ref ref="CONSOLE" />	
+	</root>
+
+</configuration>
+

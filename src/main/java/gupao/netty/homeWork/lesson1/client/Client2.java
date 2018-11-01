@@ -12,16 +12,16 @@ import org.slf4j.LoggerFactory;
 
 /**客户端：启动两个线程，一个用于注册/登录用户信息到服务器并循环监听服务器转发的消息,<br>
  * 					 另一个线程用于循环读取用户输入信息并发送给服务器*/
-public class Client {
-	private static final Logger logger = LoggerFactory.getLogger( Client.class );
+public class Client2 {
+	private static final Logger logger = LoggerFactory.getLogger( Client2.class );
 
 	private static final int DEFAULT_SERVER_PORT=7777; //服务端默认地址
 	private static final String DEFAULT_SERVER_IP="127.0.0.1"; //默认端口号
 	
 	private static final String DEFAULT_IP="127.0.0.1"; //客户端默认地址
-	private static final int DEFAULT_PORT=8888;//客户端监听端口 用于接收消息
+	private static final int DEFAULT_PORT=9999;//客户端监听端口 用于接收消息
 	
-	private static final String USERNAME="客户端1";
+	private static final String USERNAME="客户端2";
 	private static final String PASSWD="123456";//验证功能暂时没实现
 
 	public static void main(String[] args){

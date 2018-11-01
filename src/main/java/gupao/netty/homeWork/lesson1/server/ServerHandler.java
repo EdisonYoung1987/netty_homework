@@ -35,7 +35,7 @@ public class ServerHandler implements Runnable {
 			Message message;		//解析消息后得到的消息对象
 			expression=in.readLine();
 			
-			logger.info("服务端收到消息expression={}",expression);
+			logger.info("服务端收到消息expression=[{}]",expression);
 			message=Util.parseMessage(expression);
 			if(message==null){//消息解析失败
 				logger.error("消息解析失败:{}",message);

@@ -20,13 +20,14 @@ public class ConnectionUtil {
 	 * @param msgTo  - 消息接收者 ip:port
 	 * @param content 消息*/
 	public static boolean sendMsg(String msgType,String msgFrom,String msgTo,String content){
+		logger.debug("[{}] [{}] [{}] [{}]",msgType,msgFrom,msgTo,content);
+
 		String[] addr=msgTo.split(":");
 		String host=addr[0];
 		String port=addr[1];
 		PrintWriter out=null;
 		Socket socket=null;
 		BufferedReader in=null;//这个用不上 纯粹是懒得再封装一个释放资源方法
-		logger.info("[{}] [{}] [{}] [{}]",msgType,msgFrom,msgTo,content);
 		try {
 			socket=new Socket(host, Integer.parseInt(port));
 			out=new PrintWriter(socket.getOutputStream());
@@ -47,6 +48,7 @@ public class ConnectionUtil {
 		boolean result=true;
 		List<String> msgTos=message.getMsgTo();
 		for(String msgTo : msgTos){
+			logger.debug("服务端转发消息：");
 			boolean res=sendMsg(message.getFlag(), message.getMsgFrom(), msgTo, message.getContent());
 			if(res==false){
 				result=false;
@@ -64,6 +66,7 @@ public class ConnectionUtil {
 			return false;
 		}
 		
+		logger.debug("客户端发送消息");
 		if(sendMsg(message.getFlag(), message.getMsgFrom(), ip+":"+port,content )==false){
 			logger.error("发送消息[{}]给服务端失败！",message);
 			return false;
