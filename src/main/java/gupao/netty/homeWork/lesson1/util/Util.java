@@ -8,7 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**工具类*/
+/**工具类-后续可以使用xml 便于扩展，其中用户发送内容序列化传递*/
 public class Util {
 	private static final Logger logger = LoggerFactory.getLogger( Util.class );
 
@@ -27,8 +27,6 @@ public class Util {
 		message.setFlag(list[0]);//标志位
 		message.setMsgFrom(list[1]); //来源ip:port
 		message.setMsgTo( Arrays.asList(list[2].split(",")));//对方ip:port组成的列表
-		List<String> msgTos=message.getMsgTo();
-		
 		message.setContent(list[3]); //内容
 		return message;
 	}
