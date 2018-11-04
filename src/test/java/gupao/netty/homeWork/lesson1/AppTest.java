@@ -1,4 +1,4 @@
-package gupao.netty.homeWork;
+package gupao.netty.homeWork.lesson1;
 
 import static org.junit.Assert.assertTrue;
 import gupao.netty.homeWork.lesson1.base.Message;
