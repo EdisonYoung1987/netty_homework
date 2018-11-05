@@ -15,13 +15,13 @@ public class Message {
 	String  flag;  
 	
 	/**消息来源ip:port*/
-	String msgFrom;
+	UserInfo msgFrom;
 	
 	/**消息组群号*/
 	String groupid;
 	
 	/**消息对象 List\<String ip:port\>*/
-	List<String> msgTo;
+	List<UserInfo> msgTo;
 	
 	/**消息内容*/
 	String  content;
@@ -34,11 +34,11 @@ public class Message {
 		this.flag = flag;
 	}
 
-	public String getMsgFrom() {
+	public UserInfo getMsgFrom() {
 		return msgFrom;
 	}
 
-	public void setMsgFrom(String msgFrom) {
+	public void setMsgFrom(UserInfo msgFrom) {
 		this.msgFrom = msgFrom;
 	}
 
@@ -50,11 +50,11 @@ public class Message {
 		this.groupid = groupid;
 	}
 
-	public List<String> getMsgTo() {
+	public List<UserInfo> getMsgTo() {
 		return msgTo;
 	}
 
-	public void setMsgTo(List<String> msgTo) {
+	public void setMsgTo(List<UserInfo> msgTo) {
 		this.msgTo = msgTo;
 	}
 
@@ -66,10 +66,39 @@ public class Message {
 		this.content = content;
 	}
 
+	public Message(){
+		super();
+	}
+	
+	public Message(String flag, UserInfo msgFrom, String groupid,
+			List<UserInfo> msgTo, String content) {
+		super();
+		this.flag = flag;
+		this.msgFrom = msgFrom;
+		this.groupid = groupid;
+		this.msgTo = msgTo;
+		this.content = content;
+	}
+
 	@Override
 	public String toString() {
-		return "Message [flag=" + flag + ", msgFrom=" + msgFrom + ", msgTo="
-				+ msgTo + ", content=" + content + "]";
+		StringBuilder sb=new StringBuilder();
+		sb.append(flag);
+		sb.append("|");
+		sb.append(msgFrom.toString());
+		sb.append("|");
+		sb.append(groupid);
+		sb.append("|");
+		for(int i=0;i<msgTo.size();i++){
+			sb.append(msgTo.get(i).toString());
+			if(i!=msgTo.size()-1){
+				sb.append(",");
+			}
+		}
+		sb.append("|");
+		sb.append(content);
+		
+		return sb.toString();
 	}
 	
 	

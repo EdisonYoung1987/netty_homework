@@ -1,10 +1,12 @@
 package gupao.netty.homeWork.lesson2.util;
 
 import gupao.netty.homeWork.lesson2.base.Message;
+import gupao.netty.homeWork.lesson2.base.UserInfo;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class MsgUtil {
 	private static final Charset utf8 = Charset.forName("UTF-8");
 
 	/**服务端将客户端传递的消息解析成Message对象.<p>
-	 * @param expression 标志位|来源ip:port|发送至组号-ip:port,ip:port,ip:port|消息内容  组成的字串
+	 * @param expression 具体格式看message
 	 * @return 失败返回null  */
 	public static Message parseMessage(String expression){
 		if(!msgChk(expression)){//数据有效性校验失败
@@ -37,9 +39,18 @@ public class MsgUtil {
 		
 		//分别解析消息内容 暂时不校验 TODO
 		message.setFlag(list[0]);//标志位
-		message.setMsgFrom(list[1]); //来源ip:port
+		String msgfrom=list[1];
+		message.setMsgFrom(getUser(msgfrom));
+		
 		message.setGroupid(list[2]);
-		message.setMsgTo( Arrays.asList(list[3].split(",")));//对方ip:port=昵称组成的列表
+		
+		List<UserInfo> userlist=new ArrayList<UserInfo>();
+		String[] list2=list[3].split(",");
+		for(String str:list2){
+			userlist.add(getUser(str));
+		}
+		message.setMsgTo(userlist);
+		
 		message.setContent(list[4]); //内容
 		return message;
 	}
@@ -48,6 +59,7 @@ public class MsgUtil {
 	public static Message parseMessage(ByteBuffer buffer){
 		 /*解码显示，客户端发送来的信息*/
         CharBuffer cb = utf8.decode(buffer);
+        System.err.println("收到消息："+new String(cb.array()));
         return parseMessage(new String(cb.array()));
 	}
 	
@@ -75,25 +87,7 @@ public class MsgUtil {
 	}
 	/**失败返回null*/
 	public static String packMessage(Message message){
-		StringBuilder sb=new StringBuilder();
-		
-		//先获取消息接收对象
-		sb.append(message.getFlag());
-		sb.append("|");
-		sb.append(message.getMsgFrom());
-		sb.append("|");
-		List<String> msgTos=message.getMsgTo();
-		for(String msgTo:msgTos){//群发地址用,隔开
-			sb.append(msgTo+",");
-		}
-		sb.append("|");
-		sb.append(message.getContent());
-		logger.debug("打包后的message={}",sb.toString());
-		if(msgChk(sb.toString())){
-			return sb.toString();
-		}else{
-			return null;
-		}
+		return message.toString();
 	}
 	
 	/**检查message的格式是否正确<p>
@@ -129,5 +123,19 @@ public class MsgUtil {
 			//TODO 有时间再优化
 		}
 		return true;
+	}
+	
+	/**根据 地址:端口=昵称 的字符串来拆分成为userInfo*/
+	public static UserInfo getUser(String exp){
+		UserInfo userInfo=new UserInfo();
+		
+		String[] tmp=exp.split(":");
+		userInfo.setIp(tmp[0]);
+		
+		String[] tmp2=tmp[1].split("=");
+		userInfo.setPort(Integer.parseInt(tmp2[0]));
+		userInfo.setName(tmp2[1]);
+		
+		return userInfo;
 	}
 }
