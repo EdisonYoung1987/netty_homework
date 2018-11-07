@@ -48,7 +48,7 @@ public class NettyClient implements Runnable {
 		}
 	}
 
-	private static void main(String[] args) {
+	public static void main(String[] args) {
 		for(int i=0;i<3;i++){
 			new Thread(new NettyClient(),"this is thread "+i).start();
 		}
