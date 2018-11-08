@@ -20,12 +20,12 @@ public class NettyServer {
 		private static final String IP="127.0.0.1";
 		private static final int  PORT=8888;
 
-		private static final int  BIZGROUPSIZE=Runtime.getRuntime().availableProcessors();//线程数
+		private static final int  BIZGROUPSIZE=Runtime.getRuntime().availableProcessors();//获取cpu核数
 		
-		private static final int BIZTHREADSIZE=100;
+		private static final int BIZTHREADSIZE=100; //每个线程组workergroup拥有的线程数
 		
-		private static final EventLoopGroup bossGroup=new NioEventLoopGroup(BIZGROUPSIZE);
-		private static final EventLoopGroup workGroup=new NioEventLoopGroup(BIZTHREADSIZE);
+		private static final EventLoopGroup bossGroup=new NioEventLoopGroup(BIZGROUPSIZE);//专门处理连接请求
+		private static final EventLoopGroup workGroup=new NioEventLoopGroup(BIZTHREADSIZE);//专门处理数据的业务逻辑
 		
 		public static void start() throws Exception {
 			ServerBootstrap serverBootstrap=new ServerBootstrap();
