@@ -23,7 +23,7 @@ public class TcpSerServerHandler extends ChannelInboundHandlerAdapter{ //inbound
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {//异常处理
-//		super.exceptionCaught(ctx, cause);
+//		super.exceptionCaught(ctx, cause); 每个连接的异常处理，这样某个连接异常不会导致整个server异常退出
 		System.out.println("catch exc："+cause.getLocalizedMessage());
 	}
 }

@@ -11,16 +11,23 @@ public class Myclient extends ChannelInboundHandlerAdapter{
 		super.channelActive(ctx);
 	}
 
+	//TODO 客户端如何退出？
+	//TODO 客户端读写顺序怎么定的？
+	
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg)
 			throws Exception {
-		System.out.println("recv msg="+msg);
+		System.out.println("channelRead");
+
+		System.out.println("client recv msg="+msg);
+		ctx.close();
+		ctx.channel().close();
 	}
 
 	@Override
-	public void channelWritabilityChanged(ChannelHandlerContext ctx)
+	public void channelWritabilityChanged(ChannelHandlerContext ctx)//进入下一个handler处理？如果有的话
 			throws Exception {
-		// TODO Auto-generated method stub
+		System.out.println("channelWritabilityChanged"); 
 		super.channelWritabilityChanged(ctx);
 	}
 

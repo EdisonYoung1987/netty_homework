@@ -11,6 +11,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.util.CharsetUtil;
@@ -27,7 +28,7 @@ public class NettyServer {
 		private static final EventLoopGroup bossGroup=new NioEventLoopGroup(BIZGROUPSIZE);//专门处理连接请求
 		private static final EventLoopGroup workGroup=new NioEventLoopGroup(BIZTHREADSIZE);//专门处理数据的业务逻辑
 		
-		public static void start() throws Exception {
+		public static void start() throws InterruptedException  {
 			ServerBootstrap serverBootstrap=new ServerBootstrap();
 			serverBootstrap.group(bossGroup,workGroup)
 				.channel(NioServerSocketChannel.class)
@@ -37,7 +38,9 @@ public class NettyServer {
 					@Override
 					protected void initChannel(Channel ch) throws Exception {
 						ChannelPipeline pipeline=ch.pipeline();//处理器的双向链表
-						pipeline.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4));
+						//第四个参数定义的是跳过报文的长度，这里是4，就跳过了前面4字节的长度内容
+						pipeline.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4,0,4));
+						pipeline.addLast(new LengthFieldPrepender(4));
 						pipeline.addLast(new StringDecoder(CharsetUtil.UTF_8));
 						pipeline.addLast(new StringEncoder(CharsetUtil.UTF_8));
 						pipeline.addLast(new TcpSerServerHandler());
@@ -48,13 +51,21 @@ public class NettyServer {
 			System.out.println("server start");
 		}
 		
-		protected static void shutdown(){
+		protected static void shutdown(){//怎么钩？
+			System.out.println("优雅的退出？？");
 			workGroup.shutdownGracefully();
 			bossGroup.shutdownGracefully();
 		}
 		
-		public static void main(String[] args) throws Exception{
+		public static void main(String[] args) {
 			System.out.println("qidong server...");
-			NettyServer.start();
+			try{
+				NettyServer.start();
+			}catch(InterruptedException e){
+				System.out.println("SERVER 被打断");
+			}finally{
+				System.out.println("其他异常？ 比如端口已被监听");
+				NettyServer.shutdown();
+			}
 		}
 }
