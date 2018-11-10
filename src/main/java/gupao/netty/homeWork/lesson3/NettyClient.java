@@ -54,7 +54,7 @@ public class NettyClient implements Runnable {
 			for(int i=0;i<3;i++){
 				//创建一个channel实例，并注册到group上的一个EventLoop上
 				//channel.eventLoop().execute(执行连接)-channel.connect(remoteAddress, connectPromise);
-				ChannelFuture future=bootstrap.connect("127.0.0.1",8888).sync();//sync干嘛用的？
+				ChannelFuture future=bootstrap.connect("127.0.0.1",8888).sync();//sync干嘛用的？ // ChannelFuture#sync() 等待阻塞成功 这里就是等待连接成功
 				future.channel().writeAndFlush("hello "+Thread.currentThread().getName()+"-"+i);
 			}
 		}catch(Exception e){

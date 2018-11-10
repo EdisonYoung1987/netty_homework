@@ -32,8 +32,8 @@ public class NettyServer {
 			ServerBootstrap serverBootstrap=new ServerBootstrap();
 			serverBootstrap.group(bossGroup,workGroup)
 				.channel(NioServerSocketChannel.class)
-				//.handler("") 对于服务器的处理
-				.childHandler(new ChannelInitializer<Channel>() { //对于连接的处理
+				//.handler("") 对于服务器的处理 boss相关的处理器，比如可以打印日志。
+				.childHandler(new ChannelInitializer<Channel>() { //对于连接的处理，即workergroup的处理
 					
 					@Override
 					protected void initChannel(Channel ch) throws Exception {
@@ -46,8 +46,8 @@ public class NettyServer {
 						pipeline.addLast(new TcpSerServerHandler());
 					}})
 				;
-			ChannelFuture channelFuture=serverBootstrap.bind(IP,PORT).sync();//初始化channel，设置属性等  newsocket方法 selectorProvider
-			channelFuture.channel().closeFuture().sync();
+			ChannelFuture channelFuture=serverBootstrap.bind(IP,PORT).sync();//初始化channel，设置属性等  newsocket方法 selectorProvider ChannelFuture#sync() 等待阻塞成功
+			channelFuture.channel().closeFuture().sync(); // ChannelFuture是用来监听服务器不再监听端口，即服务器已停止。
 			System.out.println("server start");
 		}
 		
