@@ -47,7 +47,7 @@ public class NettyServer {
 					}})
 				;
 			ChannelFuture channelFuture=serverBootstrap.bind(IP,PORT).sync();//初始化channel，设置属性等  newsocket方法 selectorProvider ChannelFuture#sync() 等待阻塞成功
-			channelFuture.channel().closeFuture().sync(); // ChannelFuture是用来监听服务器不再监听端口，即服务器已停止。
+			channelFuture.channel().closeFuture().sync(); // ChannelFuture是用来监听【服务器不再监听端口】，即服务器已停止。
 			System.out.println("server start");
 		}
 		
