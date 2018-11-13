@@ -16,7 +16,7 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.util.CharsetUtil;
 
-//TODO 客户端如何退出？
+//TODO 客户端如何退出？ 参考src/main/java/gupao/netty/selfStudy/A_BootStrap/NettyClient.java
 //TODO 客户端读写顺序怎么定的？
 public class NettyClient implements Runnable {
 
@@ -26,7 +26,7 @@ public class NettyClient implements Runnable {
 		try{
 			Bootstrap bootstrap=new Bootstrap(); //netty组装好的一个客户端启动器框架，用户只需要把各个零件插上去就行
 			bootstrap.group(group);              //多线程reactor模型的reactor
-			bootstrap.channel(NioSocketChannel.class); //调用ReflectiveChannelFactory.newChannel(z) 反射创建实例，需无参
+			bootstrap.channel(NioSocketChannel.class); //工厂类ReflectiveChannelFactory：后续调用newChannel(z) 反射创建实例，需无参
 			bootstrap.option(ChannelOption.TCP_NODELAY, true);//Map<ChannelOption<?>, Object> options的配置
 			
 			bootstrap.handler(new ChannelInitializer<SocketChannel>() {//初始化-一个特殊的ChannelInboundHandlerAdapter抽象类，
@@ -40,7 +40,7 @@ public class NettyClient implements Runnable {
 							//第四个参数：假如希望长度值不包含消息头的长度，就可以用-4
 							//第五个参数：定义的是读取消息时跳过报文的长度，这里是4，就跳过了前面4字节的长度内容
 							channelPipeline.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,0,4,0,4));
-							channelPipeline.addLast("frameDecoder",new LengthFieldPrepender(4));//编码 消息添加4字节的长度内容
+							channelPipeline.addLast("frameDecoder",new LengthFieldPrepender(4,false));//编码 消息添加4字节的长度内容 false-不包含报文长度内容的长度
 							
 							//字节码到String的转换
 							channelPipeline.addLast("StringDecoder",new StringDecoder(CharsetUtil.UTF_8));

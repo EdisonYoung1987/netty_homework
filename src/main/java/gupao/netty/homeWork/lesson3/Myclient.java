@@ -11,7 +11,7 @@ public class Myclient extends ChannelInboundHandlerAdapter{
 		super.channelActive(ctx);
 	}
 
-	//TODO 客户端如何退出？
+	//TODO 客户端如何退出？ 参考src/main/java/gupao/netty/selfStudy/A_BootStrap/NettyClient.java
 	//TODO 客户端读写顺序怎么定的？
 	
 	@Override
