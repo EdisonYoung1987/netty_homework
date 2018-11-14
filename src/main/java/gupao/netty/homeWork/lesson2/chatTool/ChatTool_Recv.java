@@ -119,8 +119,11 @@ public class ChatTool_Recv implements Runnable {
 	                    	 }
 	                     }
 	 				 }else if(key.isWritable()){//可写
-	 					 /**注意通常不会注册写就绪事件，因为在发送缓冲区未满的情况下始终是可写的，而且
-注册写事件，而又不用写数据，则缓冲区未满总会响应写事件就绪，很容易造成CPU空转，出现消耗CPU100%的情况。*/
+	 					 /**注意通常不会在没有写东西的情况下就注册写就绪事件，因为在发送缓冲区未满的
+	 					  * 情况下始终是可写的，而且注册写事件，而又不用写数据，则缓冲区未满总会响应
+	 					  * 写事件就绪，很容易造成CPU空转，出现消耗CPU100%的情况。
+	 					  * 但是，因为非阻塞，如果高并发，有可能channel在write时，没能一次性写完，就需要
+	 					  * 注册写就绪，把剩下的都写出去*/
 //	 					 System.out.println("可写了，把信息发送出去");
 	 					 Buffers  buffers = (Buffers)key.attachment();
 	 					 ByteBuffer writeBuffer=buffers.getReadBuffer(); //获取读buffer
