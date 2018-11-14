@@ -139,6 +139,8 @@ public class ChatTool_Recv implements Runnable {
                          /*将程序定义的缓冲区中的内容写入到socket的写缓冲区中*/
                          sc.write(writeBuffer);
                          writeBuffer.clear();
+                         
+                         //★★如果写完了，这里要么关闭连接，要么取消读注册
 	 				 }
 	             }
 	        }
