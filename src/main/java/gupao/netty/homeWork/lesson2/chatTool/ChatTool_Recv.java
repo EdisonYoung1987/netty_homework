@@ -82,6 +82,9 @@ public class ChatTool_Recv implements Runnable {
 	                	 try{
 		                	 sc = ssc.accept();
 		                     sc.configureBlocking(false);
+		                     //其实这里注册读还是写还是都注册需要看处理顺序，假设是先写欢迎语句，再读请求，再写响应
+		                     //最好在这里就只注册写关注，因为写操作是异步的，不一定一次就能写完，写不完就通过attachment下次继续写
+		                     //，直到写完，再注册读关注并取消写关注，一次读不完就多读几次，直到读完，再重复写。
 		 					 sc.register(selector,SelectionKey.OP_READ|SelectionKey.OP_WRITE,new Buffers(1024, 1024));//关心读写事件，并且注册一个ByteBuffer
 	                	 }catch(Exception e){//不管是io异常还是通道异常
 	                		 e.printStackTrace();
