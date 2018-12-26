@@ -27,7 +27,7 @@ public final class Server {
 					.handler(new LoggingHandler(LogLevel.INFO))
 					// 设置连⼊服务端的 Client 的 SocketChannel 的处理器
 					.childHandler(new ServerInitializer());
-			// 绑定端⼝，并同步等待成功，即启动服务端
+			// 绑定端口，并同步等待成功，即启动服务端
 			ChannelFuture f = b.bind(8888);
 			// 监听服务端关闭，并阻塞等待
 			f.channel().closeFuture().sync();
