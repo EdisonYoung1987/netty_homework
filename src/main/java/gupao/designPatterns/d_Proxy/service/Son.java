@@ -5,4 +5,9 @@ public class Son implements I_Person {
 	public void findLover() {
 		System.out.println("被代理人： 相亲  吃饭  逛街  多约几次   感情增进 ......");
 	}
+
+	@Override
+	public void hardWorking() {
+		System.out.println("被代理人：辛勤工作");
+	}
 }
