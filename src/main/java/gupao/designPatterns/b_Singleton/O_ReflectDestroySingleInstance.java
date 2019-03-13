@@ -1,4 +1,4 @@
-package gupao.designPatterns.b_singleton;
+package gupao.designPatterns.b_Singleton;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

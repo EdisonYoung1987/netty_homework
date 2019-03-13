@@ -1,4 +1,4 @@
-package gupao.designPatterns.b_singleton;
+package gupao.designPatterns.b_Singleton;
 
 public class T_Test {
 	public static void main(String[] args) {

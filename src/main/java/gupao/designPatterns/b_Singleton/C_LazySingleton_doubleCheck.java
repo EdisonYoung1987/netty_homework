@@ -1,4 +1,4 @@
-package gupao.designPatterns.b_singleton;
+package gupao.designPatterns.b_Singleton;
 
 public class C_LazySingleton_doubleCheck {
 	private static volatile C_LazySingleton_doubleCheck b_LazySingleton=null;

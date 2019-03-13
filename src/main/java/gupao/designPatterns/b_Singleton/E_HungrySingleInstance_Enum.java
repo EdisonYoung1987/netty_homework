@@ -1,4 +1,4 @@
-package gupao.designPatterns.b_singleton;
+package gupao.designPatterns.b_Singleton;
 
 /**通过枚举的方式实现单例，实际上是饿汉式单例*/
 public enum E_HungrySingleInstance_Enum {

@@ -1,4 +1,4 @@
-package gupao.designPatterns.b_singleton;
+package gupao.designPatterns.b_Singleton;
 
 public class B_LazySingleton_synchronized {
 	private static B_LazySingleton_synchronized b_LazySingleton=null;

@@ -1,4 +1,4 @@
-package gupao.designPatterns.b_singleton;
+package gupao.designPatterns.b_Singleton;
 
 /**通过ThreadLocal实现单线程的单例，即该线程无论执行多少次getSingleInstance()获取的都是同一个对象*/
 public class F_ThreadLocalSingleInstance {

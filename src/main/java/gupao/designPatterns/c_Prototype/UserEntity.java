@@ -1,4 +1,4 @@
-package gupao.designPatterns.c_prototype;
+package gupao.designPatterns.c_Prototype;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
