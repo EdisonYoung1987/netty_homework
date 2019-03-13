@@ -4,6 +4,7 @@ import java.lang.reflect.Proxy;
 
 import gupao.designPatterns.d_Proxy.i_staticProxy.SonProxyStatic;
 import gupao.designPatterns.d_Proxy.ii_jdkDynamicProxy.SonJdkProxyHandler;
+import gupao.designPatterns.d_Proxy.iii_cglibDynamicProxy.SonCGLibProxy;
 import gupao.designPatterns.d_Proxy.service.I_Person;
 import gupao.designPatterns.d_Proxy.service.Son;
 
@@ -21,5 +22,9 @@ public class T_Test {
 		proxy_JDK.findLover();
 		proxy_JDK.hardWorking();
 		
+		//CGLib动态代理
+		I_Person proxy_CGLib=(I_Person)new SonCGLibProxy().getInstance(Son.class);
+		proxy_CGLib.findLover();
+		proxy_CGLib.hardWorking();
 	}
 }
