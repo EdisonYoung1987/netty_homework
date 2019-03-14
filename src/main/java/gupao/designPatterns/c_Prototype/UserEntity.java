@@ -7,7 +7,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
 
-/**一个实体类，需要进行拷贝*/
+/**原型模式：一个实体类，需要进行拷贝*/
 public class UserEntity implements Serializable {
 	int age;
 	String name;

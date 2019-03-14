@@ -19,7 +19,8 @@ public class SonCGLibProxy implements MethodInterceptor{
 	@Override
 	public Object intercept(Object target, Method method, Object[] args, MethodProxy proxy) throws Throwable {
 		before();
-//		Object res=method.invoke(target, args); //这个会抛异常。。。。
+//		Object res=method.invoke(target, args); //这个会循环调用，抛异常。。。。
+//		proxy.invoke(target, args);//死循环
 		Object res=proxy.invokeSuper(target, args);
 		after();
 		return res;
