@@ -4,7 +4,6 @@ import javax.tools.JavaCompiler;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-import org.hamcrest.core.IsInstanceOf;
 
 import java.io.File;
 import java.io.FileWriter;
