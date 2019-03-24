@@ -5,9 +5,9 @@
 	<property name="XML_HOME" value="src/main/resources/logback" />
 	<property name="MAX_DAY" value="7" />
 	<property name="MAX_FILE_SIZE" value="50MB" />
-	<property name="PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}][%level][%X{BEANID}][%X{STEPID}][%class:%line]%n%msg%n%n"/>
+	<property name="PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}][%level][%X{BEANID}][%X{STEPID}][%class:%line]%n%msg%n%n"></property>
 	<property name="PATTERN_BUSI" value="[%d{yyyy-MM-dd HH:mm:ss:SSS}][%level][%X{BEANID}][%X{STEPID}]%n%msg%n%n"/>	
-	<property name="LOG_LV" value="INFO" />
+	<property name="LOG_LV" value="DEBUG" />
 	<property name="ENCODING" value="UTF-8" />
 	
 	<!-- 说明：appender指定一个输出格式，包括pattern、路径、名称、分卷模式、filter等信息，而
