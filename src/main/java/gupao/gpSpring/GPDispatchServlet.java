@@ -110,7 +110,7 @@ public class GPDispatchServlet extends HttpServlet{
 				Field[] fields=entry.getValue().getClass().getDeclaredFields();
 				for(Field field : fields) {
 					GPAutowired autowired=field.getAnnotation(GPAutowired.class);
-					String beanName=autowired.getName();
+					String beanName=autowired.value();
 					
 					field.setAccessible(true);
 					try {
