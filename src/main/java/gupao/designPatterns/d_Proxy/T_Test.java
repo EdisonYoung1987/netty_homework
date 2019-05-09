@@ -13,6 +13,7 @@ public class T_Test {
 	public static void main(String[] args)
 	{
 		I_Person son=new Son();
+		System.out.println(son);
 		
 		//静态代理
 		SonProxyStatic proxy_Static=new SonProxyStatic(son);
@@ -20,6 +21,8 @@ public class T_Test {
 		
 		//JDK动态代理
 		I_Person proxy_JDK=(I_Person)new SonJdkProxyHandler().getInstance(son);
+		System.out.println(proxy_JDK);
+		System.out.println(proxy_JDK.getClass());
 		proxy_JDK.findLover();
 		proxy_JDK.hardWorking();
 		

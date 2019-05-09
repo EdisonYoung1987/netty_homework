@@ -17,6 +17,7 @@ public class SonJdkProxyHandler implements InvocationHandler{
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		before();
+		System.out.println(method.getModifiers());
 		Object res=method.invoke(this.target, args);//这里需要传入被代理对象
 		after();
 		return res;
