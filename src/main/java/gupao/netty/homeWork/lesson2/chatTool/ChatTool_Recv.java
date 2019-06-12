@@ -102,7 +102,7 @@ public class ChatTool_Recv implements Runnable {
 	 					 /*通过SelectionKey获取通道对应的缓冲区--这个确实骚，把不同次的读取的内容多可以搞在一起*/
 	 					 Buffers  buffers = (Buffers)key.attachment();
 	 					 ByteBuffer readBuffer=buffers.getReadBuffer(); //获取读buffer
-	 					 ByteBuffer writeBuffer=buffers.getReadBuffer(); //获取读buffer
+	 					 ByteBuffer writeBuffer=buffers.getWriteBuffer(); //获取读buffer
 	 					 
 	                     /*通过SelectionKey获取对应的通道*/
 	                     SocketChannel sc = (SocketChannel) key.channel();
@@ -129,7 +129,7 @@ public class ChatTool_Recv implements Runnable {
 	 					  * 注册写就绪，把剩下的都写出去*/
 //	 					 System.out.println("可写了，把信息发送出去");
 	 					 Buffers  buffers = (Buffers)key.attachment();
-	 					 ByteBuffer writeBuffer=buffers.getReadBuffer(); //获取读buffer
+	 					 ByteBuffer writeBuffer=buffers.getWriteBuffer(); //获取读buffer
 	 					 
 	                     /*通过SelectionKey获取对应的通道*/
 	                     SocketChannel sc = (SocketChannel) key.channel();
