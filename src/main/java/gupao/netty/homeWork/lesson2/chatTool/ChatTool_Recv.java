@@ -50,7 +50,7 @@ public class ChatTool_Recv implements Runnable {
         	//打开服务器通道，并设置非阻塞
         	ssc=ServerSocketChannel.open();//服务器通道，也是open方式
         	ssc.bind(new InetSocketAddress(port), 100); //最大同时接入？
-        	ssc.configureBlocking(false);     //设置非阻塞
+        	ssc.configureBlocking(false);     //设置非阻塞,为了兼容bio，默认是阻塞模式的
         	
         	/*服务器通道只能对tcp连接事件感兴趣*/
             ssc.register(selector, SelectionKey.OP_ACCEPT);
