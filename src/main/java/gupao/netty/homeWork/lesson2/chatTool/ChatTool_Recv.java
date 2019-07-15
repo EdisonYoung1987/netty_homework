@@ -47,7 +47,7 @@ public class ChatTool_Recv implements Runnable {
         	//打开服务器通道，并设置非阻塞
         	ssc=ServerSocketChannel.open();//服务器通道，也是open方式
         	ssc.bind(new InetSocketAddress(port), 100); //最大同时接入？
-        	ssc.configureBlocking(false);     //设置非阻塞
+        	ssc.configureBlocking(false);     //设置非阻塞,为了兼容bio，默认是阻塞模式的
         	
         	/*服务器通道只能对tcp连接事件感兴趣*/
             ssc.register(selector, SelectionKey.OP_ACCEPT);
@@ -99,7 +99,7 @@ public class ChatTool_Recv implements Runnable {
 	 					 /*通过SelectionKey获取通道对应的缓冲区--这个确实骚，把不同次的读取的内容多可以搞在一起*/
 	 					 Buffers  buffers = (Buffers)key.attachment();
 	 					 ByteBuffer readBuffer=buffers.getReadBuffer(); //获取读buffer
-	 					 ByteBuffer writeBuffer=buffers.getReadBuffer(); //获取读buffer
+	 					 ByteBuffer writeBuffer=buffers.getWriteBuffer(); //获取读buffer
 	 					 
 	                     /*通过SelectionKey获取对应的通道*/
 	                     SocketChannel sc = (SocketChannel) key.channel();
@@ -128,7 +128,7 @@ public class ChatTool_Recv implements Runnable {
 	 					  * 注册写就绪，把剩下的都写出去*/
 //	 					 System.out.println("可写了，把信息发送出去");
 	 					 Buffers  buffers = (Buffers)key.attachment();
-	 					 ByteBuffer writeBuffer=buffers.getReadBuffer(); //获取读buffer
+	 					 ByteBuffer writeBuffer=buffers.getWriteBuffer(); //获取读buffer
 	 					 
 	                     /*通过SelectionKey获取对应的通道*/
 	                     SocketChannel sc = (SocketChannel) key.channel();
