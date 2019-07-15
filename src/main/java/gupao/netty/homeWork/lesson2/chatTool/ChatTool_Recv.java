@@ -9,10 +9,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -108,7 +105,7 @@ public class ChatTool_Recv implements Runnable {
 	                     SocketChannel sc = (SocketChannel) key.channel();
 	                      
 	                     //TODO 从底层socket读缓冲区中读入数据,实际情况如何处理粘包和半包？？
-	                     if(sc.read(readBuffer)>0){ //-1读到末尾 0-buffer满了? >0实际读到的数量 因为客户端限制了一次性发送消息大小
+	                     if(sc.read(readBuffer)>=0){ //-1读到末尾 0-buffer满了? >0实际读到的数量 因为客户端限制了一次性发送消息大小
 	                    	 readBuffer.flip();//写转读 limit=position,position=0
 	                    	 String response=dealWithMessage(readBuffer); 
 	                    	 readBuffer.clear(); //为下次读做准备
@@ -120,7 +117,9 @@ public class ChatTool_Recv implements Runnable {
 	                    		 writeBuffer.put(response.getBytes());
 	                     
 	                    	 }
-	                     }
+	                     }else{//说明read返回-1 表示客户端已经断开连接
+	                     	 key.cancel(); //不取消的话，前面的select()可能一直有返回值，造成死循环
+						 }
 	 				 }else if(key.isWritable()){//可写
 	 					 /**注意通常不会在没有写东西的情况下就注册写就绪事件，因为在发送缓冲区未满的
 	 					  * 情况下始终是可写的，而且注册写事件，而又不用写数据，则缓冲区未满总会响应
@@ -140,7 +139,11 @@ public class ChatTool_Recv implements Runnable {
 	                     //从底层socket读缓冲区中读入数据,实际情况如何处理粘包和半包？？
 	                     writeBuffer.flip();
                          /*将程序定义的缓冲区中的内容写入到socket的写缓冲区中*/
-                         sc.write(writeBuffer);
+                         try{
+						 	sc.write(writeBuffer);
+                         }catch(NotYetConnectedException e){//假设此时客户端已经断开连接
+                         	key.cancel();//不再处理 避免出问题
+						 }
                          writeBuffer.clear();
                          
                          //★★如果写完了，这里要么关闭连接，要么取消读注册
