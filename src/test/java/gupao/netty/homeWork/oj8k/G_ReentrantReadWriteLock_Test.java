@@ -7,7 +7,7 @@ public class G_ReentrantReadWriteLock_Test {
 
     public static void main(final String[] args) {
         Random random=new Random(System.currentTimeMillis());
-        for(int i=0;i<10;i++){
+        for(int i=0;i<100;i++){
             int j=random.nextInt(2);
             if(j==0){//启动一个读线程
                  new Thread("读线程"+i){
@@ -30,7 +30,7 @@ public class G_ReentrantReadWriteLock_Test {
                     public void run() {
                         lock.getWriteLock();
                         Random random=new Random(System.currentTimeMillis());
-                        int time=random.nextInt(5)+5;
+                        int time=random.nextInt(5)+3;
                         try {
                             sleep(1000*time);
                             lock.releaseWriteLock();
