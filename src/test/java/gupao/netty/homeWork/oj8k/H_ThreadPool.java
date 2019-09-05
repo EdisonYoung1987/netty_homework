@@ -36,7 +36,7 @@ public class H_ThreadPool {
 
         //第二种方式：ExecutorService继承类
         ThreadPoolExecutor poolExecutor=new ThreadPoolExecutor(10,75,20,TimeUnit.SECONDS,
-                new ArrayBlockingQueue<>(50),new MyThreadFactory("计算子任务"),
+                new ArrayBlockingQueue<Runnable>(50),new MyThreadFactory("计算子任务"),
                 new MyRejectedExecutionHandler());
         for(int i=0;i<200;i++) {
 //            poolExecutor.submit(new MyRunnable("任务"+i));
